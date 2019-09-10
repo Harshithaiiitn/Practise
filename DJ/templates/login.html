@@ -1,0 +1,64 @@
+
+{% load static %}
+<html>
+    <head>
+            <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+            <link rel="stylesheet" type="text/css" href="{% static 'Mapper/login.css' %}">
+            <title>Login</title>
+    </head>
+
+    <style>
+     
+    #left{
+        float:left;
+        width:65%;
+        height:100%;
+        background-color:gray
+    }
+    #img{
+        height:100%;
+        width:100%;
+    }
+    </style>
+
+    <body id="page1">
+        <div id="full">
+        <div id="left">
+            <img src="{% static 'Mapper/logo2.png' %}" alt="no image" id="img">
+        </div>
+        <div id="right">
+                {% load crispy_forms_tags %}
+				<form action="login/" method="POST">
+                    {% csrf_token %}
+                    <div class="login-wrap">
+                        <div class="login-html">
+                            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+                            <div class="login-form">
+                                <div class="sign-in-htm">
+                                    <div class="group" style="margin-top:10px">
+                                        <label for="user" class="label">Username</label>
+										<input id="user" class="input" type="text" placeholder="Enter Username" name="uname" required><br>
+                                    </div>
+                                    <div class="group" style="margin-top:10px">
+                                        <label for="pass" class="label">Password</label>
+                                        <input type="password"  class="input" id="pass" placeholder="Enter Password" name="pwd" required><br>
+        
+                                    </div>
+                                  
+                                    <div class="group" style="margin-top:60px">
+                                        <button type="submit" class="button">Sign In</button><br>  
+                                    </div>
+                                  
+                                  
+                                </div>
+                        </div>
+                    
+                    </div>
+            </form>
+
+        </div>
+    </div>   
+</body>
+
+</html>
+

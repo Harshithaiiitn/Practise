@@ -1,0 +1,262 @@
+
+<!---Loading static Files-->
+{% load static %}
+
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'firstpage/process.css' %}"> -->
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'firstpage/style.css' %}"> -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> 
+
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<title>Regulation</title>
+<style>
+  @media only screen and (min-width: 100px){
+  *{
+    MARGIN:0PX;
+  }
+    #header{
+      margin:0px;
+      height:70px;
+      background-color:#23364B;
+      color:white;
+      text-align:center;
+      font-size:40px;
+  }
+  #combine{
+    margin:2% 5% 0% 5%;
+    padding-left:5%;
+    padding-right:5%;
+    
+  }
+  .stepbar{   
+    height:inherit;
+    width:100%;
+    clear:both;
+    margin-left:-0%;
+    padding-top:2%;
+    background-image: linear-gradient(to bottom, rgba(135, 192, 205, 0.514) 0%,rgba(135, 192, 205, 0.6) 100%), url("{% static 'firstpage/img/ea.jpg' %}");
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center center;
+    background-attachment: fixed;
+  }
+  #div2{
+    height:70%;
+    width:100%;
+    padding:1% 5% 0% 5%;
+    animation: 1s ease-out 0s 1 slideInFromLeft;
+    overflow-y:auto;
+    background:#f3f9fb;
+               
+  }
+  .progressbar {
+  counter-reset: step;
+  }
+  .progressbar li {
+  list-style: none;
+  display: inline-block; 
+  width: 15.00%;
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+  }
+  .progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 40px;
+  height: 40px;
+  line-height : 40px;
+  border: 3px solid gray;
+  border-radius: 100%;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  background-color: #fff;
+  }
+  .progressbar li:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: gray;
+    top: 20px;
+    left: -50%;
+    z-index : -1;
+  }
+  .progressbar li:first-child:after {
+        content: none; 
+  }
+  .progressbar li.active {
+      color: green;
+    }
+    .progressbar li.active:before {
+      border-color: green;
+    } 
+    .progressbar li.active + li:after {
+      background-color: green;
+    }
+    @keyframes slideInFromLeft {
+      0% {
+        transform: translateX(30%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+    #submit{
+    background: #0066A2;
+    color: white;
+    border-style: outset;
+    border-color: #0066A2;
+    height: 40px;
+    width: 180px;
+    text-align:center;
+    font: bold 15px arial, sans-serif;
+    text-shadow:none;
+    margin-left:40%; 
+
+  }
+  #form{
+      margin:50px 100px;
+    }
+    .col-form-label{
+      font-size:20px;
+      color:steelblue;
+    }
+    
+    #id_Regulation{
+    height:40px;
+    }
+  .form-check
+    {
+      height:40px;
+      font-size:18px;
+    }
+  .form-check-input{
+      height:20px;
+      width:20px;
+    }
+    .create{
+      float:right;
+    }
+    .sub{
+      float:left;
+    }
+    #buttons {
+      padding-top:5%;
+    }
+    #custom_ba{
+      margin-top:10%;
+    }
+    /* .row{
+    width:100%;
+    height:40%;
+    } */
+    .col-2,.col2{
+        float:left;
+        padding-left:25%;
+        /* BACKGROUND-COLOR:GRAY; */
+    }
+    .col-2:after
+    {
+        content:"*";
+        color:red 
+    }
+    .col-4{
+        float:right;
+        padding-right:45%;
+        width:60%;
+        /* BACKGROUND-COLOR:GREEN; */
+        
+    }
+    .top{
+        width:100%;
+        clear: both;
+    } 
+    .middle{
+        width:100%;
+        padding-top:3%;
+        clear: both;
+    }
+    .bottom{
+        padding-top:3%;
+        width:100%;
+        clear: both;
+        
+    }
+    .col4{
+        padding-top:5%
+    }
+    .input-group{
+      width:100%
+    }
+    .input-group-append{
+      width:50%
+    }
+
+  }
+</style>
+
+
+
+<div id="page3">
+    <div id="header">
+        Risk Management
+    </div>
+    <div id="combine">  
+      <div class="container stepbar">
+          <ul class="progressbar">
+            <li class="active">Business</li>
+            <li class="active">Regulations</li>
+            <li class="active">Process</li>
+            <li clas="active">Control</li>
+            <li>Risk</li>
+            <li>Mapping</li>
+          </ul>
+      </div>
+      <div id="div2">
+          {% load crispy_forms_tags %}
+
+                    {% block container %}
+            {% if heading %}
+            <h3>{{heading}}</h3>
+            {% endif %}
+            <form class="form-horizontal" method="POST" >
+                {% csrf_token %}
+            {{ formset.management_form }}
+            {% for form in formset %}
+            <div class="row form-row spacer">
+                <div class="top">
+
+                        <div class="col-2">
+                                <label>Risk Level</label>
+                            </div>
+                            <div class="col-4">
+                                <div class="input-group">
+                                    {{form.risk}}
+                                </div>
+                            </div>
+                </div>
+                <div class="middle">
+                        <div class="col-2">
+                                <label>Comment</label>
+                            </div>
+                            <div class="col-4">
+                                <div class="input-group">
+                                    {{form.comment}}
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col4 offset-2">
+                            <button type="submit" id="submit" class="btn btn-block btn-primary">Update Risk</button>
+                      </div>
+            </div>
+            {% endfor %}
+          
+            </form>
+            {% endblock %}
+          
+            </form>
+      </div>
+    </div>
+</div>  

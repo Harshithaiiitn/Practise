@@ -1,0 +1,293 @@
+
+<!---Loading static Files-->
+{% load static %}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> 
+
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<title>Regulation</title>
+<style>
+  @media only screen and (min-width: 100px){
+  *{
+    MARGIN:0PX;
+  }
+    #header{
+      margin:0px;
+      height:70px;
+      background-color:#23364B;
+      color:white;
+      text-align:center;
+      font-size:40px;
+  }
+  #combine{
+    margin:2% 5% 0% 5%;
+    padding-left:5%;
+    padding-right:5%;
+    
+  }
+  .stepbar{   
+    height:inherit;
+    width:100%;
+    clear:both;
+    margin-left:-0%;
+    padding-top:2%;
+    background-image: linear-gradient(to bottom, rgba(135, 192, 205, 0.514) 0%,rgba(135, 192, 205, 0.6) 100%), url("{% static 'firstpage/img/ea.jpg' %}");
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center center;
+    background-attachment: fixed;
+  }
+  #div2{
+    height:70%;
+    width:100%;
+    padding:1% 5% 0% 5%;
+    animation: 1s ease-out 0s 1 slideInFromLeft;
+    overflow-y:auto;
+    background:#f3f9fb;
+               
+  }
+  .progressbar {
+  counter-reset: step;
+  }
+  .progressbar li {
+  list-style: none;
+  display: inline-block; 
+  width: 15.00%;
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+  }
+  .progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 40px;
+  height: 40px;
+  line-height : 40px;
+  border: 3px solid gray;
+  border-radius: 100%;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  background-color: #fff;
+  }
+  .progressbar li:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: gray;
+    top: 20px;
+    left: -50%;
+    z-index : -1;
+  }
+  .progressbar li:first-child:after {
+        content: none; 
+  }
+  .progressbar li.active {
+      color: green;
+    }
+    .progressbar li.active:before {
+      border-color: green;
+    } 
+    .progressbar li.active + li:after {
+      background-color: green;
+    }
+    @keyframes slideInFromLeft {
+      0% {
+        transform: translateX(30%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+    #submit,.create{
+    background: #0066A2;
+    color: white;
+    border-style: outset;
+    border-color: #0066A2;
+    height: 40px;
+    width: 180px;
+    text-align:center;
+    font: bold 15px arial, sans-serif;
+    text-shadow:none;
+    margin-top:2%;
+  }
+  #form{
+      margin:50px 100px;
+    }
+    .col-form-label{
+      font-size:20px;
+      color:steelblue;
+    }
+    .asteriskField{
+      color:red;
+    }  
+    #id_Regulation{
+    height:40px;
+    }
+  .form-check
+    {
+      height:40px;
+      font-size:18px;
+    }
+  .form-check-input{
+      height:20px;
+      width:20px;
+    }
+    .create{
+      float:right;
+    }
+    .sub{
+      float:left;
+    }
+    #buttons {
+      padding-top:5%;
+    }
+    #custom_ba{
+      margin-top:10%;
+    }
+    .row{
+    width:100%;
+    height:40%;
+    }
+    .col-2{
+        float:left;
+        padding-left:5%;
+    }
+    .col-2:after
+    {
+        content:"*";
+        color:red 
+    }
+    .col-4{
+        float:right;
+        padding-right:1%;
+        width:40%;
+        
+    }
+    .top{
+        width:100%;
+        clear: both;
+    } 
+    .middle{
+        width:100%;
+        padding-top:3%;
+        clear: both;
+    }
+    .bottom{
+        padding-top:3%;
+        width:100%;
+        clear: both;
+    }
+    .input-group{
+      width:90%
+    }
+    #jur{
+      float:left
+    }
+    #plus{
+      /* float:right; */
+      padding-left:-45%;
+    }
+    #predefined_ba{
+      padding-top:3%;
+    }
+  }
+</style>
+
+
+
+<div id="page3">
+    <div id="header">
+        Business Management
+    </div>
+    <div id="combine">  
+      <div class="container stepbar">
+          <ul class="progressbar">
+            <li>Business</li>
+            <li>Regulations</li>
+            <li>Process</li>
+            <li>Control</li>
+            <li>Risk</li>
+            <li>Mapping</li>
+          </ul>
+      </div>
+      <div id="div2">
+          {% load crispy_forms_tags %}
+              {% block container %}
+              <form method='post' >
+              {% csrf_token %}
+              {% if heading %}
+              <h3>{{heading}}</h3>
+              {% endif %}
+              <div id="predefined_ba">
+                {{ form.as_p }}
+                <div>
+                  <p style="color:crimson">To apply common mapping to all selected Ba's, please check "Group All"</p>
+                  <input type="checkbox" name="groupall" value="yes">Group All
+                </div>
+                <input type='submit' id="submit" class="btn  btn-primary" value='Submit'>
+              </div>
+              </form><br>
+              <button type="button" class="btn btn-primary"  onclick="openCustomBa();closePredefinedBa();" >Create Business Activity</button>
+              <form method="POST" >
+              <div class="form-horizontal" id="custom_ba"  style="visibility:hidden;">
+                {% csrf_token %}
+              {{ formset.management_form }}
+              {% for form in formset %}
+              <div class="row form-row spacer">
+                    <div class="col-2">
+                            <label>Business Definition (Question)</label>
+                        </div>
+                        <div class="col-4">
+                            <div class="input-group">
+                                {{form.businessdefinition_q}}
+                            </div>
+                        </div>
+                        <div class="col-2">
+                          <label>Business Definition (Answer)</label>
+                      </div>
+                      <div class="col-4">
+                          <div class="input-group">
+                              {{form.businessdefinition_a}}
+                          </div>
+                      </div>
+                <div class="col-2">
+                    <label>Jurisdiction</label>
+                </div>
+                <div class="col-4">
+                    <div class="input-group">
+                        {{form.jurisdiction}}&nbsp;
+                        <div>
+                            <button type="button" class="btn-danger" onclick="closeCustomBa();openPredefinedBa();">Close</button>
+                        </div>
+                    </div>
+                </div>
+              </div><br>
+              <input type='submit' id="submit" class="btn  btn-primary" value='Submit'>
+              {% endfor %}
+              </div>
+              </div>
+              </form>
+              {% endblock %}
+              {% block custom_js %}
+              <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+              <script type="text/javascript">
+              function openCustomBa(){
+              document.getElementById("custom_ba").style.visibility="visible";
+              }
+              function openPredefinedBa(){
+              document.getElementById("predefined_ba").style.visibility="visible";
+              }
+              function closePredefinedBa(){
+              document.getElementById("predefined_ba").style.visibility="hidden";
+              }
+              function closeCustomBa(){
+              document.getElementById("custom_ba").style.visibility="hidden";
+              }
+              </script>
+              {% endblock %}
+      </div>
+    </div>
+</div>  

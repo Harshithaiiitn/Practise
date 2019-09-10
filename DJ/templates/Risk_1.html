@@ -1,0 +1,244 @@
+
+<!---Loading static Files-->
+{% load static %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<title>Risk_1</title>
+<!-- Loading Styles For step progress bar -->
+<style>
+    @media only screen and (min-width: 50px){
+    *{
+      MARGIN:0PX;
+    }
+      #header{
+        margin:0px;
+        height:70px;
+        background-color:#23364B;
+        color:white;
+        text-align:center;
+        font-size:40px;
+    }
+    #combine{
+      margin:2% 5% 0% 5%;
+      padding-left:5%;
+      padding-right:5%;
+      
+    }
+    .stepbar{   
+        height:inherit;
+        width:100%;
+        clear:both;
+        margin-left:-0%;
+        padding-top:2%;
+        background-image: linear-gradient(to bottom, rgba(135, 192, 205, 0.514) 0%,rgba(135, 192, 205, 0.6) 100%), url("{% static 'firstpage/img/ea.jpg' %}");
+        background-repeat: no-repeat;
+        background-size:cover;
+        background-position: center center;
+        background-attachment: fixed;
+    }
+    #div2{
+        height:60%;
+        width:100%;
+        padding:1% 5% 0% 5%;
+        animation: 1s ease-out 0s 1 slideInFromLeft;
+        overflow-y:auto;
+        background:#f3f9fb;
+                
+    }
+    .progressbar {
+        counter-reset: step;
+        }
+        .progressbar li {
+        list-style: none;
+        display: inline-block; 
+        width: 15.00%;
+        position: relative;
+        text-align: center;
+        cursor: pointer;
+        }
+        .progressbar li:before {
+        content: counter(step);
+        counter-increment: step;
+        width: 40px;
+        height: 40px;
+        line-height : 40px;
+        border: 3px solid gray;
+        border-radius: 100%;
+        display: block;
+        text-align: center;
+        margin: 0 auto 10px auto;
+        background-color: #fff;
+        }
+        .progressbar li:after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background-color: gray;
+            top: 20px;
+            left: -50%;
+            z-index : -1;
+        }
+        .progressbar li:first-child:after {
+                content: none; 
+        }
+        .progressbar li.active {
+            color: green;
+            }
+        .progressbar li.active:before {
+            border-color: green;
+        } 
+        .progressbar li.active + li:after {
+            background-color: green;
+        }
+        @keyframes slideInFromLeft {
+        0% {
+            transform: translateX(30%);
+        }
+        100% {
+            transform: translateX(0);
+        }
+        }
+        #submit{
+                background: #0066A2;
+                color: white;
+                border-style: outset;
+                border-color: #0066A2;
+                height: 40px;
+                width: 100px;
+                font: bold 16px arial, sans-serif;
+                text-shadow:none;
+                text-align:center;
+                margin-left:45%;
+            }
+            .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 3px;
+            }
+
+            .node text { font: 12px sans-serif; }
+
+           #graph{
+               margin-left:20%;
+               margin-right:20%;
+           }
+
+
+            .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 2px;
+            }
+    }
+</style>
+
+<div id="page9_risk1">
+        <div id="header">Risk</div>
+
+        <div id="combine">
+            <div class="container stepbar">
+                <ul class="progressbar">
+                        <li class="active">Business</li>
+                        <li class="active">Regulations</li>
+                        <li class="active">Process</li>
+                        <li class="active">Control</li>
+                        <li>Risk</li>
+                        <li>Mapping</li>
+                </ul>
+            </div>
+            <div id="div2">
+                    {% load render_table from django_tables2 %}
+                    {% block content %}
+                    
+                        
+                        {% render_table table %}
+                        {% if flag %}
+                        <a class="btn btn-primary" style="margin-left: 880px" href="finalmapping">Next</a>
+                        {% else %}
+                        <a class="btn btn-primary" style="margin-left: 880px"  disabled>Next</a>
+                        {% endif %}
+                    
+                    {% endblock %}
+            </div>
+        </div>
+        <div id="graph" >
+            <!-- <div><h2 align="center">Regulation to BA to Process to Control </h2></div> -->
+            <div>
+                <script src="http://d3js.org/d3.v3.min.js"></script>
+ 
+                <script>
+                var treeData=[{{data | safe }}]
+                // alert(treeData)
+                
+                // ************** Generate the tree diagram  *****************
+                var margin = {top:50, right: 200, bottom:0, left: 500},
+                 width = 1890 - margin.right - margin.left,
+                 height = 500 - margin.top - margin.bottom;
+                 
+                var i = 0;
+                
+                var tree = d3.layout.tree()
+                 .size([height, width]);
+                
+                var diagonal = d3.svg.diagonal()
+                 .projection(function(d) { return [d.y, d.x]; });
+                
+                var svg = d3.select("body").append("svg")
+                 .attr("width", width + margin.right + margin.left)
+                 .attr("height", height + margin.top + margin.bottom)
+                  .append("g")
+                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                
+                root = treeData[0];
+                  
+                update(root);
+                
+                function update(source) {
+                
+                  // Compute the new tree layout.
+                  var nodes = tree.nodes(root).reverse(),
+                   links = tree.links(nodes);
+                
+                  // Normalize for fixed-depth.
+                  nodes.forEach(function(d) { d.y = d.depth * 180; });
+                
+                  // Declare the nodesâ€¦
+                  var node = svg.selectAll("g.node")
+                   .data(nodes, function(d) { return d.id || (d.id = ++i); });
+                
+                  // Enter the nodes.
+                  var nodeEnter = node.enter().append("g")
+                   .attr("class", "node")
+                   .attr("transform", function(d) { 
+                    return "translate(" + d.y + "," + d.x + ")"; });
+                
+                  nodeEnter.append("circle")
+                   .attr("r", 10)
+                   .style("fill", "#fff");
+                
+                  nodeEnter.append("text")
+                   .attr("x", function(d) { 
+                    return d.children || d._children ? -13 : 13; })
+                   .attr("dy", ".35em")
+                   .attr("text-anchor", function(d) { 
+                    return d.children || d._children ? "end" : "start"; })
+                   .text(function(d) { return d.name; })
+                   .style("fill-opacity", 1);
+                
+                  // Declare the linksâ€¦
+                  var link = svg.selectAll("path.link")
+                   .data(links, function(d) { return d.target.id; });
+                
+                  // Enter the links.
+                  link.enter().insert("path", "g")
+                   .attr("class", "link")
+                   .attr("d", diagonal);
+                
+                }
+                
+                </script>
+                 
+            
+            </div>
+        </div>
+</div>
